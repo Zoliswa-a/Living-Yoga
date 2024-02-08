@@ -48,16 +48,50 @@ def validate_data(values):
 
     return True
 
-def update_arrived_worksheet(data):
+
+def update_worksheet(data, worksheet):
     """
-    Update arrived worksheet
+    Receives a list of intergers to be inserted into a worksheet
+    Updates the relevant worksheet with data provided
     """
-    print("updating arrived worksheet...\n")
-    arrived_worksheet = SHEET.worksheet("arrived")
-    arrived_worksheet.append_row(data)
-    print("Arrived worksheet successfully updated.\n")
+    print(f"updating {worksheet} worksheet...\n")
+    worksheet_to_update = SHEET.worksheet(worksheet)
+    worksheet_to_update.append_row(data)
+    print(f"{worksheet} worksheet successfully updated.\n")
 
 
-data = get_arrived_data()
-arrived_data = [int(num) for num in data]
-update_arrived_worksheet(arrived_data)
+def calculate_surplus_data(arrived_row):
+    """
+    Calculating surplus data
+
+    The surplus is defined by the arrived figure subtracted from expected figure
+    - Positive surplus indicates the no shows (but reserved a mat space)
+    - Negative surplus indicates the 
+    """
+
+    print("Calculating surplus data...\n")
+    expected = SHEET.worksheet("expected").get_all_values()
+    expected_row = expected[-1]
+
+    surplus_data = []
+    for expected, arrived in zip(expected_row,arrived_row):
+        surplus = int(expected) - arrived
+        surplus_data.append(surplus)
+  
+     
+    return surplus_data
+
+
+def main():
+    """
+    Runs all functions
+    """
+    data = get_arrived_data()
+    arrived_data = [int(num) for num in data]
+    update_worksheet(arrived_data, "arrived")
+    new_surplus_data = calculate_surplus_data(arrived_data)
+    update_worksheet(new_surplus_data, "surplus")
+
+
+print("Welcome to Living Yoga Data Automation")
+main()
