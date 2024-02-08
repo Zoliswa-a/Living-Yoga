@@ -83,7 +83,7 @@ def calculate_surplus_data(arrived_row):
 
 def get_arrived_entries():
     """
-    .
+    is
     """
     arrived = SHEET.worksheet("arrived")
   
@@ -92,22 +92,7 @@ def get_arrived_entries():
         column = arrived.col_values(ind)
         columns.append(column[-5:])
     
-    return columns
-    
-def calculate_expected_data(data):
-    """
-    Calculating expected data
-    """
-    print("Caculatin expected data")
-    new_expected_data =[]
-
-    for column in data:
-        int_column = [int(num) for num in column]
-        average_sum = sum(int_column) / len(int_column)
-        expected_num = average_sum * 1.1
-        new_expected_data.append(expected_num)
-
-    print(new_expected_data)
+    print(columns)
 
 def main():
     """
