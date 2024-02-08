@@ -78,21 +78,40 @@ def calculate_surplus_data(arrived_row):
         surplus = int(expected) - arrived
         surplus_data.append(surplus)
   
-     
     return surplus_data
 
 def get_arrived_entries():
     """
-    is
+
+    Collects columns of data from worksheet
     """
-    arrived = SHEET.worksheet("arrived")
-  
+    arrived = SHEET.worksheet("arrived") 
     columns = []
     for ind in range(1, 7):
         column = arrived.col_values(ind)
         columns.append(column[-5:])
+        
+    return columns
+
+
+def calculate_expected_data(data):
+    """
+    calculate the average spaces 
+    """
+
+    print("Calculating expected data...\n")
+    new_expected_data = []
+
+    for column in data:
+        int_column = [int(num) for num in column]
+        average = sum(int_column) / len(int_column)
+        expected_num = average * 1.1
+        new_expected_data.append(round(expected_num))
+
     
-    print(columns)
+    return new_expected_data
+     
+
 
 def main():
     """
@@ -103,9 +122,10 @@ def main():
     update_worksheet(arrived_data, "arrived")
     new_surplus_data = calculate_surplus_data(arrived_data)
     update_worksheet(new_surplus_data, "surplus")
-
+    arrived_columns = get_arrived_entries()
+    expected_data = calculate_expected_data(arrived_columns)
+    update_worksheet(expected_data, "expected")
+    print(expected_data)
 
 print("Welcome to Living Yoga Data Automation")
-# main()
-
-arrived_columns = get_arrived_entries()
+main()
